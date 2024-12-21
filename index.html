@@ -1,1 +1,62 @@
-<!DOCTYPE html><html lang="zh-CN"><head>    <meta charset="UTF-8">    <title>大叔爱媳妇的网站</title>    <style>        body {            font-family: Arial, sans-serif;            max-width: 800px;            margin: 0 auto;            padding: 20px;            text-align: center;        }        h1 {            color: #333;        }</style></head><body>    <h1>欢迎来到大叔的个人网站</h1>    <p>大叔走向网络的第一步！</p></body></html>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎页面</title>
+    <script src="https://api.ipify.org?format=json"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap" async defer></script>
+</head>
+<body>
+    <h1>欢迎来到大叔的网站！</h1>
+    <p>您的IP地址是：<span id="ip"></span></p>
+    <div id="map" style="width: 100%; height: 400px;"></div>
+    <p id="location"></p>
+    <p id="time"></p>
+    <p id="weather"></p>
+
+    <script>
+        async function getIP() {
+            const response = await fetch('https://api.ipify.org?format=json');
+            const data = await response.json();
+            document.getElementById('ip').textContent = data.ip;
+        }
+
+        function initMap() {
+            const location = document.getElementById('location');
+            const ip = document.getElementById('ip').textContent;
+            const latLong = ipToLatLong(ip);
+            if (latLong) {
+                location.textContent = `位于：${latLong.latitude}, ${latLong.longitude}`;
+                new google.maps.Map(document.getElementById('map'), {
+                    center: {lat: latLong.latitude, lng: latLong.longitude},
+                    zoom: 15
+                });
+            }
+        }
+
+        function ipToLatLong(ip) {
+            // 这里应该使用一个IP地理位置查询API来获取真实的经纬度
+            // 为了示例，我们假设返回一个固定的值
+            return {
+                latitude: 39.9042,
+                longitude: 116.4074
+            };
+        }
+
+        function updateTime() {
+            const time = new Date();
+            document.getElementById('time').textContent = `当前时间：${time.toLocaleString()}`;
+        }
+
+        function updateWeather() {
+            // 这里应该使用一个天气API来获取实时天气信息
+            // 为了示例，我们假设返回一个固定的值
+            document.getElementById('weather').textContent = `天气情况：晴`;
+        }
+
+        getIP();
+        updateTime();
+        updateWeather();
+    </script>
+</body>
+</html>
